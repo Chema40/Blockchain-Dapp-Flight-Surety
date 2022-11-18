@@ -138,9 +138,9 @@ contract FlightSuretyApp {
         }
     }
 
-    // function getFunds() external {
-    //     flightSuretyData.pay(msg.sender);
-    // }
+    function getFunds() external {
+        flightSuretyData.pay(msg.sender);
+    }
 
 
    /**
@@ -295,6 +295,10 @@ contract FlightSuretyApp {
         }
     }
 
+    function buyInsurance(string flight, uint256 timestamp, address airline) external payable {
+        require(msg.value > 0, 'Can not buy insurance without funds');
+        flightSuretyData.buy.value(msg.value)(flight, timestamp, airline, msg.sender);
+    }
 
     function getFlightKey(
                             address airline,

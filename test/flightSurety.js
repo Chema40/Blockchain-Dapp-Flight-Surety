@@ -1,13 +1,21 @@
 
-var Test = require('../config/testConfig.js');
-var BigNumber = require('bignumber.js');
+const Test = require('../config/testConfig.js');
+const BigNumber = require('bignumber.js');
+const truffleAssert = require('truffle-assertions');
+
+let fund = 0;
+let insurancePolicy = 0;
 
 contract('Flight Surety Tests', async (accounts) => {
 
-  var config;
+  let config;
   before('setup contract', async () => {
     config = await Test.Config(accounts);
     await config.flightSuretyData.authorizeCaller(config.flightSuretyApp.address);
+    fund = await config.flightSuretyData.AIRLINE_MIN_FUNDS.call();
+    insurancePolicy = await config.flightSuretyData.MAX_INSURANCE_POLICY.call();
+    await config.flightSuretyApp.sendTransaction({from: config.firstAirline, value: fund});
+    await config.flightSuretyApp.registerAirline('Root air', config.firstAirline, {from: config.owner});
   });
 
   /****************************************************************************************/
