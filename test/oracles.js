@@ -1,21 +1,25 @@
 
 var Test = require('../config/testConfig.js');
+const truffleAssert = require('truffle-assertions');
+const BN = require('bn.js')
 //var BigNumber = require('bignumber.js');
 
 contract('Oracles', async (accounts) => {
 
   const TEST_ORACLES_COUNT = 20;
+  const STATUS_CODE_UNKNOWN = 0;
+  const STATUS_CODE_ON_TIME = 10;
+  const STATUS_CODE_LATE_AIRLINE = 20;
+  const STATUS_CODE_LATE_WEATHER = 30;
+  const STATUS_CODE_LATE_TECHNICAL = 40;
+  const STATUS_CODE_LATE_OTHER = 50;
+
   var config;
   before('setup contract', async () => {
     config = await Test.Config(accounts);
 
     // Watch contract events
-    const STATUS_CODE_UNKNOWN = 0;
-    const STATUS_CODE_ON_TIME = 10;
-    const STATUS_CODE_LATE_AIRLINE = 20;
-    const STATUS_CODE_LATE_WEATHER = 30;
-    const STATUS_CODE_LATE_TECHNICAL = 40;
-    const STATUS_CODE_LATE_OTHER = 50;
+
 
   });
 
@@ -47,7 +51,7 @@ contract('Oracles', async (accounts) => {
     // loop through all the accounts and for each account, all its Indexes (indices?)
     // and submit a response. The contract will reject a submission if it was
     // not requested so while sub-optimal, it's a good test of that feature
-    for(let a=1; a<TEST_ORACLES_COUNT; a++) {
+    for(let a=1; a < TEST_ORACLES_COUNT; a++) {
 
       // Get oracle information
       let oracleIndexes = await config.flightSuretyApp.getMyIndexes.call({ from: accounts[a]});
@@ -65,10 +69,5 @@ contract('Oracles', async (accounts) => {
 
       }
     }
-
-
-  });
-
-
- 
+  }); 
 });
